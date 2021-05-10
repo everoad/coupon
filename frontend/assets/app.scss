@@ -1,0 +1,135 @@
+html {
+  font-family: "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic NEO", gulim, dotum, sans-serif;
+  font-size: 16px;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 1325px;
+}
+
+main {
+  min-height: 770px;
+}
+
+
+.el-input {
+  &.text-center {
+    > .el-input__inner {
+      text-align: center;
+    }
+  }
+
+  &.el-input--large {
+    > .el-input__inner {
+      height: 50px;
+      line-height: 50px;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.el-custom-message {
+  > .el-message__content {
+    font-size: 1.1rem;
+  }
+}
+
+.el-checkbox {
+  &.checkbox-lg {
+    > .el-checkbox__input {
+      > .el-checkbox__inner {
+        width: 26px;
+        height: 26px;
+        border-width: 2px;
+
+        &::after {
+          box-sizing: border-box;
+          content: '\2714';
+          color: #fff;
+          font-size: 1.1rem;
+          border-width: 0;
+          transform: rotate(0deg) scaleY(1);
+        }
+
+        &:focus,
+        &:hover {
+          border-color: #DCDFE6;
+        }
+      }
+
+      &.is-focus {
+        > .el-checkbox__inner {
+          border-color: #DCDFE6;
+        }
+      }
+
+      &.is-checked {
+        > .el-checkbox__inner {
+          border-color: #af8350;
+          background-color: #af8350;
+        }
+
+        &+.el-checkbox__label {
+          color: #af8350;
+        }
+      }
+    }
+    > .el-checkbox__label {
+      vertical-align: middle;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.input-with-select.btn-gold {
+  > .el-input__inner {
+    border-width: 0;
+  }
+  > .el-input-group__append {
+    color: #fff;
+    font-weight: 700;
+    background: linear-gradient(to bottom, #C69663, #986A3C);
+    border-width: 0;
+
+    &:hover {
+      background: linear-gradient(to bottom, #deb182, #af8350);;
+    }
+    > .el-button.is-loading:before {
+      background-color: transparent;
+    }
+  }
+
+}
