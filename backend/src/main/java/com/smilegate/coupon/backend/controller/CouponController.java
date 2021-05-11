@@ -1,12 +1,14 @@
 package com.smilegate.coupon.backend.controller;
 
 import com.smilegate.coupon.backend.core.dto.ApiResponseDto;
+import com.smilegate.coupon.backend.core.dto.PageDto;
 import com.smilegate.coupon.backend.domain.dto.coupon.CouponInfoDto;
 import com.smilegate.coupon.backend.domain.dto.coupon.CouponListDto;
 import com.smilegate.coupon.backend.domain.dto.coupon.CouponSaveDto;
 import com.smilegate.coupon.backend.domain.dto.coupon.CouponSearchDto;
 import com.smilegate.coupon.backend.service.CouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
@@ -23,9 +25,9 @@ public class CouponController {
 
 
     @GetMapping
-    public ApiResponseDto<Slice<CouponListDto>> findCouponList(CouponSearchDto couponSearchDto, Pageable pageable) {
-        Slice<CouponListDto> couponSlice = couponService.findCouponList(couponSearchDto, pageable);
-        return new ApiResponseDto<>(couponSlice);
+    public ApiResponseDto<Page<CouponListDto>> findCouponList(CouponSearchDto couponSearchDto, PageDto pageDto) {
+        Page<CouponListDto> couponPage = couponService.findCouponList(couponSearchDto, pageDto.getPageable());
+        return new ApiResponseDto<>(couponPage);
     }
 
 

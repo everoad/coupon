@@ -24,9 +24,12 @@ export default {
     './node_modules/element-ui/packages/theme-chalk/src/checkbox.scss',
     './node_modules/element-ui/packages/theme-chalk/src/dialog.scss',
     './node_modules/element-ui/packages/theme-chalk/src/radio.scss',
+    './node_modules/element-ui/packages/theme-chalk/src/table.scss',
+    './node_modules/element-ui/packages/theme-chalk/src/alert.scss',
+    './node_modules/element-ui/packages/theme-chalk/src/table-column.scss'
   ],
   plugins: [
-    '@/plugins/element-ui',
+    { src: '@/plugins/element-ui', ssr: true },
     '@/plugins/vue-in-viewport-directive.js'
   ],
 
@@ -54,8 +57,8 @@ export default {
         [
           'component',
           {
-            'libraryName': 'element-ui',
-            'styleLibraryName': 'theme-chalk'
+            libraryName: 'element-ui',
+            styleLibraryName: 'theme-chalk'
           }
         ]
       ]

@@ -9,12 +9,17 @@ import com.smilegate.coupon.backend.repository.CouponQueryRepository;
 import com.smilegate.coupon.backend.repository.CouponRepository;
 import com.smilegate.coupon.backend.service.CouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,7 +32,7 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
-    public Slice<CouponListDto> findCouponList(CouponSearchDto couponSearchDto, Pageable pageable) {
+    public Page<CouponListDto> findCouponList(CouponSearchDto couponSearchDto, Pageable pageable) {
         return couponQueryRepository.findAll(couponSearchDto, pageable);
     }
 
@@ -49,16 +54,30 @@ public class CouponServiceImpl implements CouponService {
 
 
     private String getCouponCode(String phoneNumber) {
-        String couponCode = createCouponCode(phoneNumber);
+        String couponCode = generateCoupon(phoneNumber);
         if (couponRepository.existsById(couponCode)) {
-            return createCouponCode(phoneNumber);
+            return generateCoupon(phoneNumber);
         }
         return couponCode;
     }
 
+    SecureRandom random = new SecureRandom();
 
-    private String createCouponCode(String phoneNumber) {
-        return "123412341234";
+    private String generateCoupon(String phoneNumber) {
+        byte[] randomBytes = new byte[6];
+
+        String seed = UUID.randomUUID() + phoneNumber;
+        random.setSeed(seed.getBytes(StandardCharsets.UTF_8));
+        random.nextBytes(randomBytes);
+        return byteArrayToHex(randomBytes);
+    }
+
+    private String byteArrayToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (final byte b : bytes) {
+            builder.append(String.format("%02x", b & 0xff).toUpperCase());
+        }
+        return builder.toString();
     }
 
 

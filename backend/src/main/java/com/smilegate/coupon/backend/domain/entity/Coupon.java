@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Table(
         indexes = {
                 @Index(name = "UX_coupon_phone_number", columnList = "phone_number", unique = true),
-                @Index(name = "IX_coupon_created_time_phone_number", columnList = "created_time, phone_number")
+                @Index(name = "IX_coupon_created_time_mobile_os", columnList = "created_time, mobile_os")
         }
 )
 public class Coupon extends BaseTimeEntity implements Persistable<String> {

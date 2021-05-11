@@ -6,6 +6,8 @@ import com.smilegate.coupon.backend.domain.dto.coupon.CouponListDto;
 import com.smilegate.coupon.backend.domain.dto.coupon.CouponSearchDto;
 import com.smilegate.coupon.backend.domain.dto.coupon.QCouponListDto;
 import com.smilegate.coupon.backend.domain.entity.Coupon;
+import com.smilegate.coupon.backend.enums.MobileOSType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
@@ -22,21 +24,22 @@ public class CouponQueryRepository extends Querydsl4RepositorySupport {
         super(Coupon.class);
     }
 
-    public Slice<CouponListDto> findAll(CouponSearchDto couponSearchDto, Pageable pageable) {
-        return applyPaginationForSlice(pageable, query -> query.
+    public Page<CouponListDto> findAll(CouponSearchDto couponSearchDto, Pageable pageable) {
+        return applyPagination(pageable, query -> query.
                 select(
                         new QCouponListDto(
-                                coupon.code,
-                                coupon.phoneNumber,
-                                coupon.createdTime
+                                myAs(coupon.code),
+                                myAs(coupon.phoneNumber),
+                                myAs(coupon.mobileOS),
+                                myAs(coupon.createdTime)
                         )
                 )
                 .from(coupon)
                 .where(
                         createdTimeBefore(couponSearchDto.getEndCreatedTime()),
-                        phoneNumberEq(couponSearchDto.getPhoneNumber())
+                        phoneNumberEq(couponSearchDto.getPhoneNumber()),
+                        mobileOSEq(couponSearchDto.getMobileOS())
                 )
-                .orderBy(coupon.createdTime.desc())
         );
     }
 
@@ -49,6 +52,10 @@ public class CouponQueryRepository extends Querydsl4RepositorySupport {
             endTime = LocalDateTime.now();
         }
         return coupon.createdTime.before(endTime);
+    }
+
+    private BooleanExpression mobileOSEq(MobileOSType osType) {
+        return osType != null ? coupon.mobileOS.eq(osType) : null;
     }
 
 

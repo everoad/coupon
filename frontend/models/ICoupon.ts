@@ -1,4 +1,4 @@
-import MOBILE_OS from "./mobile_os"
+import MOBILE_OS from './mobile_os'
 
 interface Save {
   phoneNumber: string
@@ -11,15 +11,21 @@ interface Info {
 }
 
 interface List {
-  num: number
   code: string
   phoneNumber: string
   createdTime: string
   mobileOS: MOBILE_OS
 }
 
+interface Search {
+  code?: string
+  phoneNumber?: string
+  mobileOS?: MOBILE_OS
+}
+
 export {
   Save,
   Info,
-  List
+  List,
+  Search
 }
