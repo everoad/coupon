@@ -8,7 +8,7 @@
         <el-form
           :inline="true"
           size="small"
-          label-width="75px"
+          label-width="85px"
         >
           <el-form-item label="쿠폰번호">
             <el-input
@@ -16,15 +16,21 @@
               maxlength="12"
             />
           </el-form-item>
-          <el-form-item label="전화번호">
+          <el-form-item label="휴대폰번호">
             <el-input
               v-model="search.phoneNumber"
               maxlength="11"
             />
           </el-form-item>
-          <el-form-item label="OS">
-            <el-select v-model="search.mobileOS">
-              <el-option label="선택" value="" />
+          <el-form-item label="휴대폰 OS">
+            <el-select
+              v-model="search.mobileOS"
+              placeholder="선택"
+            >
+              <el-option
+                label="선택"
+                value
+              />
               <el-option
                 v-for="os in mobileOSList"
                 :key="os"
@@ -34,7 +40,11 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button>검색</el-button>
+            <el-button
+              type="info"
+            >
+              검색
+            </el-button>
           </el-form-item>
         </el-form>
       </section>
@@ -50,12 +60,12 @@
           <el-table-column
             type="index"
             align="center"
-            :index="calcIndex"
+            :index="getIndex"
             label="No"
           />
           <el-table-column
             v-for="column in columns"
-            :key="column.code"
+            :key="column.prop"
             :prop="column.prop"
             :formatter="column.formatter"
             :label="column.label"
@@ -92,8 +102,8 @@ export default class Coupon extends Vue {
   private size: number = 0
   private page: number = 0
   private loading: boolean = false
-  private search: ICoupon.Search = { code: '', phoneNumber: '', mobileOS: '' }
   private defaultSort: ISort = { prop: 'createdTime', order: 'descending' }
+  private search: ICoupon.Search = { code: '', phoneNumber: '', mobileOS: undefined }
   private columns: Array<IColumn> = [
     {
       prop: 'code',
@@ -126,14 +136,14 @@ export default class Coupon extends Vue {
     }
   }
 
-  get mobileOSList (): string[] {
-    return Object.keys(MOBILE_OS)
-  }
-
   watchQuery (newQuery: any, oldQuery: any) {
     return newQuery.page !== oldQuery.page ||
       newQuery.size !== oldQuery.size ||
       newQuery.sort !== oldQuery.sort
+  }
+
+  get mobileOSList (): string[] {
+    return Object.keys(MOBILE_OS)
   }
 
   setPage (page: number) {
@@ -147,7 +157,7 @@ export default class Coupon extends Vue {
     this.$router.push(`${this.$route.path}?${query}`)
   }
 
-  calcIndex (index: number): number {
+  getIndex (index: number): number {
     return this.totalCount - this.size * (this.page - 1) - index
   }
 
@@ -169,8 +179,8 @@ export default class Coupon extends Vue {
   couponCodeFormatter (row: ICoupon.List) {
     const code = row.code
     const prefix = code.substring(0, 4)
-    const suffix = code.substring(code.length - 4)
     const center = code.substring(4, 8)
+    const suffix = code.substring(code.length - 4)
     return `${prefix}-${center}-${suffix}`
   }
 }
@@ -191,6 +201,15 @@ header {
   max-width: 1140px;
   .search > form {
     display: flex;
+  }
+  section {
+    margin-bottom: 1rem;
+  }
+  form > div:last-child {
+    float: right;
+  }
+  .el-pagination {
+    text-align: right;
   }
 }
 </style>

@@ -6,35 +6,35 @@
       </video>
     </div>
     <el-header>
-      <div class="logo"></div>
+      <div class="logo" />
     </el-header>
     <el-container direction="column">
-      <section class="index viewport-target" v-in-viewport.once>
-        <div class="season"></div>
-        <div class="logo"></div>
-        <div class="subtitle"></div>
-        <div class="message"></div>
-        <div class="scroll"></div>
+      <section v-in-viewport.once class="index viewport-target">
+        <div class="season" />
+        <div class="logo" />
+        <div class="subtitle" />
+        <div class="message" />
+        <div class="scroll" />
       </section>
       <section class="event1">
-        <div class="title viewport-target" v-in-viewport.once></div>
-        <div class="message viewport-target" v-in-viewport.once>
-          <br/>
+        <div v-in-viewport.once class="title viewport-target" />
+        <div v-in-viewport.once class="message viewport-target">
+          <br>
           <p>로스트아크 시즌2 사전등록을 신청하세요.</p>
           <p>휴대폰 번호를 입력하시고, <span class="text-gradient">사전등록 쿠폰을 받아가세요!</span></p>
-          <br/>
+          <br>
           <p><span class="text-gradient">사전등록 기간 : 2021.05.12(수) ~ 06.30(수) 점검 전까지</span></p>
         </div>
-        <div class="form viewport-target" v-in-viewport.once>
+        <div v-in-viewport.once class="form viewport-target">
           <div class="form-group">
             <form @submit.prevent="onSubmit">
               <div class="os">
                 <el-radio-group v-model="couponSave.mobileOS" fill="#af8350">
                   <el-radio label="aos">
-                    <div class="aos"></div>
+                    <div class="aos" />
                   </el-radio>
                   <el-radio label="ios">
-                    <div class="ios"></div>
+                    <div class="ios" />
                   </el-radio>
                 </el-radio-group>
               </div>
@@ -48,8 +48,8 @@
                 @input="onPhoneNumberInput"
               >
                 <el-button
-                  nativeType="submit"
                   slot="append"
+                  native-type="submit"
                   :loading="loading"
                 >
                   <span>신청하기</span>
@@ -57,10 +57,10 @@
               </el-input>
               <div class="privacy">
                 <el-checkbox
+                  v-model="couponSave.agree"
                   class="checkbox-lg"
                   size="medium"
                   label="개인정보 수집 및 이용 동의"
-                  v-model="couponSave.agree"
                 />
                 <el-button
                   type="info"
@@ -73,7 +73,9 @@
             </form>
             <div v-if="couponInfo.code" class="coupon">
               <div>쿠폰번호</div>
-              <div ref="couponCode">{{ couponInfo.code }}</div>
+              <div ref="couponCode">
+                {{ couponInfo.code }}
+              </div>
               <el-button
                 type="text"
                 @click="onCopyClipboardBtnClick"
@@ -83,18 +85,18 @@
             </div>
           </div>
         </div>
-        <div class="gift viewport-target" v-in-viewport.once></div>
-        <div class="guide viewport-target" v-in-viewport.once></div>
+        <div v-in-viewport.once class="gift viewport-target" />
+        <div v-in-viewport.once class="guide viewport-target" />
       </section>
       <section class="event2">
-        <div class="title viewport-target" v-in-viewport.once></div>
-        <div class="subtitle viewport-target" v-in-viewport.once></div>
-        <div class="reward-wrapper viewport-target" v-in-viewport.once>
-          <div class="reward1"></div>
-          <div class="reward2"></div>
-          <div class="reward3"></div>
+        <div v-in-viewport.once class="title viewport-target" />
+        <div v-in-viewport.once class="subtitle viewport-target" />
+        <div v-in-viewport.once class="reward-wrapper viewport-target">
+          <div class="reward1" />
+          <div class="reward2" />
+          <div class="reward3" />
         </div>
-        <div class="message viewport-target" v-in-viewport.once></div>
+        <div v-in-viewport.once class="message viewport-target" />
       </section>
     </el-container>
     <el-dialog
@@ -111,7 +113,8 @@
               <li>로스트아크 사전예약 등록 여부 및 쿠폰 번호 확인</li>
             </ul>
           </li>
-          <li><strong>개인정보 수집 항목</strong>
+          <li>
+            <strong>개인정보 수집 항목</strong>
             <ul>
               <li>휴대전화번호</li>
             </ul>
@@ -133,28 +136,27 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component} from "nuxt-property-decorator"
-import * as ICoupon from "~/models/ICoupon"
-import IResponse from "~/models/IResponse"
-import MOBILE_OS from "~/models/mobile_os"
-import {Input} from "element-ui"
+import { Vue, Component } from 'nuxt-property-decorator'
+import { Input } from 'element-ui'
+import * as ICoupon from '~/models/ICoupon'
+import IResponse from '~/models/IResponse'
+import MOBILE_OS from '~/models/mobile_os'
 
 @Component
 export default class Index extends Vue {
-
-  private couponSave: ICoupon.Save = {phoneNumber: '', agree: false, mobileOS: MOBILE_OS.AOS}
-  private couponInfo: ICoupon.Info = {code: ''}
+  private couponSave: ICoupon.Save = { phoneNumber: '', agree: false, mobileOS: MOBILE_OS.AOS }
+  private couponInfo: ICoupon.Info = { code: '' }
   private dialogVisible: boolean = false
   private loading: boolean = false
 
-  onPhoneNumberInput(value: string) {
-    if (this.isInvalidInteger(value)) {
+  onPhoneNumberInput (value: string) {
+    if (this.isNotInteger(value)) {
       value = value.substring(0, value.length - 1)
     }
     this.couponSave.phoneNumber = value
   }
 
-  async onSubmit() {
+  async onSubmit () {
     if (this.checkForm()) {
       return
     }
@@ -164,14 +166,14 @@ export default class Index extends Vue {
     this.loading = false
   }
 
-  checkForm() {
-    const {phoneNumber, agree, mobileOS} = this.couponSave
+  checkForm () {
+    const { phoneNumber, agree, mobileOS } = this.couponSave
     if (!phoneNumber) {
       (this.$refs.phoneInput as Input).focus()
       alert('휴대폰 번호를 입력해 주세요.')
       return true
     }
-    if (phoneNumber.length < 10 || this.isInvalidInteger(phoneNumber)) {
+    if (phoneNumber.length < 10 || this.isNotInteger(phoneNumber)) {
       (this.$refs.phoneInput as Input).focus()
       alert('휴대폰 번호를 확인해 주세요.')
       return true
@@ -187,11 +189,11 @@ export default class Index extends Vue {
     return false
   }
 
-  isInvalidInteger(value: string) {
+  isNotInteger (value: string) {
     return isNaN(value as any) || value.lastIndexOf('.') > -1
   }
 
-  onCopyClipboardBtnClick() {
+  onCopyClipboardBtnClick () {
     const el = this.$refs.couponCode as HTMLSpanElement
     const range = document.createRange() as Range
     const select = window.getSelection() as Selection
@@ -202,7 +204,6 @@ export default class Index extends Vue {
     select.removeRange(range)
     this.$message('클립보드에 복사했습니다.')
   }
-
 }
 </script>
 

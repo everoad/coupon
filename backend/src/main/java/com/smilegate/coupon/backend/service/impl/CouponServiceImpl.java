@@ -65,7 +65,6 @@ public class CouponServiceImpl implements CouponService {
 
     private String generateCoupon(String phoneNumber) {
         byte[] randomBytes = new byte[6];
-
         String seed = UUID.randomUUID() + phoneNumber;
         random.setSeed(seed.getBytes(StandardCharsets.UTF_8));
         random.nextBytes(randomBytes);

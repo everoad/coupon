@@ -1,6 +1,6 @@
 
 export default interface IColumn {
-  prop: string,
-  label: string,
+  prop: string
+  label: string
   formatter?: Function
 }
