@@ -11,10 +11,9 @@ export interface Column {
 }
 
 export interface Req {
-  page: number | string
-  size: number | string
-  sort?: string
-  total: number
+  page: number
+  size: number
+  sort: Sort | null
 }
 
 export interface Res<T> {

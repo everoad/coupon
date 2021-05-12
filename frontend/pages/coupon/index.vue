@@ -72,6 +72,10 @@
             sortable="custom"
           />
         </el-table>
+
+        <base-table
+          url="/api/coupon"
+        />
         <el-pagination
           layout="prev, pager, next"
           :hide-on-single-page="false"
@@ -91,6 +95,8 @@ import * as ICoupon from '~/models/ICoupon'
 import { IResponse } from '~/models/IResponse'
 import * as ITable from '~/models/ITable'
 import MOBILE_OS from '~/models/mobile_os'
+
+const defaultSort = JSON.stringify({ prop: 'createdTime', order: 'descending' })
 
 @Component
 export default class Coupon extends Vue {
@@ -125,11 +131,15 @@ export default class Coupon extends Vue {
     }
   ]
 
+  getData () {
+
+  }
+
   async asyncData ({ $axios, query }: any) {
     const {
       size = 10,
       page = 1,
-      sort = { prop: 'createdTime', order: 'descending' },
+      sort = defaultSort,
       code,
       phoneNumber,
       mobileOS
@@ -151,7 +161,9 @@ export default class Coupon extends Vue {
       size,
       page,
       search: {
-        code, phoneNumber, mobileOS
+        code,
+        phoneNumber,
+        mobileOS
       }
     }
   }
