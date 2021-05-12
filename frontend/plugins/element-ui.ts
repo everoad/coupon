@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import {
-  Button, Card, Container, Header,
+  Button, Container, Header,
   FormItem,
   Input, Checkbox, Select, Option, Dialog, Radio, RadioGroup,
   Table, TableColumn,
   Message, Pagination, Form
 } from 'element-ui'
+import { ElMessageOptions } from 'element-ui/types/message'
 
 Vue.component(Header.name, Header)
 Vue.component(Container.name, Container)
@@ -26,7 +27,7 @@ Vue.component(Table.name, Table)
 Vue.component(TableColumn.name, TableColumn)
 Vue.component(Pagination.name, Pagination)
 
-Vue.prototype.$message = function (options) {
+Vue.prototype.$message = function (options: string | ElMessageOptions) {
   if (typeof options === 'string') {
     options = { message: options }
   }
@@ -34,5 +35,5 @@ Vue.prototype.$message = function (options) {
     ...options,
     offset: 150,
     customClass: 'el-custom-message'
-  })
+  } as ElMessageOptions)
 }

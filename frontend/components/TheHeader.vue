@@ -8,7 +8,7 @@
       </li>
       <li>
         <router-link to="/coupon">
-          예약목록
+          쿠폰목록
         </router-link>
       </li>
     </ul>

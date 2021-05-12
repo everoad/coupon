@@ -30,7 +30,8 @@ export default {
   ],
   plugins: [
     { src: '@/plugins/element-ui', ssr: true },
-    '@/plugins/vue-in-viewport-directive.js'
+    '@/plugins/vue-in-viewport-directive.js',
+    '@/plugins/utils.ts'
   ],
 
   components: true,

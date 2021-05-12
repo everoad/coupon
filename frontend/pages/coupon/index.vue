@@ -50,7 +50,6 @@
       </section>
       <section>
         <el-table
-          v-loading="loading"
           border
           empty-text="데이터가 없습니다."
           :default-sort="defaultSort"
@@ -88,12 +87,10 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
-import IResponse from '~/models/IResponse'
 import * as ICoupon from '~/models/ICoupon'
-import * as IPage from '~/models/IPage'
-import IColumn from '~/models/IColumn'
+import { IResponse } from '~/models/IResponse'
+import * as ITable from '~/models/ITable'
 import MOBILE_OS from '~/models/mobile_os'
-import ISort from '~/models/ISort'
 
 @Component
 export default class Coupon extends Vue {
@@ -101,19 +98,22 @@ export default class Coupon extends Vue {
   private totalCount: number = 0
   private size: number = 0
   private page: number = 0
-  private loading: boolean = false
-  private defaultSort: ISort = { prop: 'createdTime', order: 'descending' }
+  private defaultSort?: ITable.Sort
   private search: ICoupon.Search = { code: '', phoneNumber: '', mobileOS: undefined }
-  private columns: Array<IColumn> = [
+  private columns: Array<ITable.Column> = [
     {
       prop: 'code',
       label: '쿠폰번호',
-      formatter: this.couponCodeFormatter
+      formatter: (row: ICoupon.List): string => {
+        return this.$couponFormatter(row.code)
+      }
     },
     {
       prop: 'phoneNumber',
       label: '휴대폰번호',
-      formatter: this.phoneNumberFormatter
+      formatter: (row: ICoupon.List): string => {
+        return this.$phoneFormatter(row.phoneNumber)
+      }
     },
     {
       prop: 'mobileOS',
@@ -125,14 +125,34 @@ export default class Coupon extends Vue {
     }
   ]
 
-  async asyncData ({ $axios, query: { size = 10, page = 1, sort } }: any) {
-    const params: IPage.Request = { size: Number(size), page: Number(page), sort }
-    const res: IResponse<IPage.Response<ICoupon.List>> = await $axios.get('/api/coupons', { params })
+  async asyncData ({ $axios, query }: any) {
+    const {
+      size = 10,
+      page = 1,
+      sort = { prop: 'createdTime', order: 'descending' },
+      code,
+      phoneNumber,
+      mobileOS
+    } = query
+    const params = {
+      size: Number(size),
+      page: Number(page),
+      sort,
+      code,
+      phoneNumber,
+      mobileOS
+    }
+    const res: IResponse<ITable.Res<ICoupon.List>> = await $axios.get('/api/coupons', { params })
     const { content, totalElements } = res.data.body
     return {
       couponList: content,
       totalCount: totalElements,
-      ...params
+      defaultSort: sort,
+      size,
+      page,
+      search: {
+        code, phoneNumber, mobileOS
+      }
     }
   }
 
@@ -147,7 +167,7 @@ export default class Coupon extends Vue {
   }
 
   setPage (page: number) {
-    const query = this.getQueryString({ ...this.$route.query, page, size: this.size })
+    const query = this.getQueryString({ ...this.$route.query, page })
     this.$router.push(`${this.$route.path}?${query}`)
   }
 
@@ -166,22 +186,6 @@ export default class Coupon extends Vue {
       .filter(key => query[key])
       .map(key => `${key}=${query[key]}`)
       .join('&')
-  }
-
-  phoneNumberFormatter (row: ICoupon.List) {
-    const phoneNumber = row.phoneNumber
-    const prefix = phoneNumber.substring(0, 3)
-    const suffix = phoneNumber.substring(phoneNumber.length - 4)
-    const center = phoneNumber.replace(prefix, '').replace(suffix, '')
-    return `${prefix}-${center}-${suffix}`
-  }
-
-  couponCodeFormatter (row: ICoupon.List) {
-    const code = row.code
-    const prefix = code.substring(0, 4)
-    const center = code.substring(4, 8)
-    const suffix = code.substring(code.length - 4)
-    return `${prefix}-${center}-${suffix}`
   }
 }
 </script>

@@ -74,7 +74,7 @@
             <div v-if="couponInfo.code" class="coupon">
               <div>쿠폰번호</div>
               <div ref="couponCode">
-                {{ couponInfo.code }}
+                {{ couponCode }}
               </div>
               <el-button
                 type="text"
@@ -139,7 +139,7 @@
 import { Vue, Component } from 'nuxt-property-decorator'
 import { Input } from 'element-ui'
 import * as ICoupon from '~/models/ICoupon'
-import IResponse from '~/models/IResponse'
+import { IResponse } from '~/models/IResponse'
 import MOBILE_OS from '~/models/mobile_os'
 
 @Component
@@ -148,6 +148,10 @@ export default class Index extends Vue {
   private couponInfo: ICoupon.Info = { code: '' }
   private dialogVisible: boolean = false
   private loading: boolean = false
+
+  get couponCode (): string {
+    return this.$couponFormatter(this.couponInfo.code)
+  }
 
   onPhoneNumberInput (value: string) {
     if (this.isNotInteger(value)) {
@@ -166,7 +170,7 @@ export default class Index extends Vue {
     this.loading = false
   }
 
-  checkForm () {
+  checkForm (): boolean {
     const { phoneNumber, agree, mobileOS } = this.couponSave
     if (!phoneNumber) {
       (this.$refs.phoneInput as Input).focus()
@@ -189,15 +193,15 @@ export default class Index extends Vue {
     return false
   }
 
-  isNotInteger (value: string) {
+  isNotInteger (value: string): boolean {
     return isNaN(value as any) || value.lastIndexOf('.') > -1
   }
 
   onCopyClipboardBtnClick () {
-    const el = this.$refs.couponCode as HTMLSpanElement
+    const couponCodeElement = this.$refs.couponCode as HTMLSpanElement
     const range = document.createRange() as Range
     const select = window.getSelection() as Selection
-    range.selectNode(el.childNodes[0])
+    range.selectNode(couponCodeElement.childNodes[0])
     select.removeAllRanges()
     select.addRange(range)
     document.execCommand('copy')
