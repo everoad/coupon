@@ -41,11 +41,11 @@ public class CouponQueryRepository extends Querydsl4RepositorySupport {
     }
 
     private BooleanExpression codeLike(String code) {
-        return StringUtils.hasText(code) ? coupon.code.contains(code) : null;
+        return StringUtils.hasText(code) ? coupon.code.containsIgnoreCase(code) : null;
     }
 
     private BooleanExpression phoneNumberEq(String phoneNumber) {
-        return StringUtils.hasText(phoneNumber) ? coupon.phoneNumber.eq(phoneNumber) : null;
+        return StringUtils.hasText(phoneNumber) ? coupon.phoneNumber.contains(phoneNumber) : null;
     }
 
     private BooleanExpression mobileOSEq(MobileOSType osType) {

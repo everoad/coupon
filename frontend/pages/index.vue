@@ -144,8 +144,16 @@ import MOBILE_OS from '~/models/mobile_os'
 
 @Component
 export default class Index extends Vue {
-  private couponSave: ICoupon.Save = { phoneNumber: '', agree: false, mobileOS: MOBILE_OS.AOS }
-  private couponInfo: ICoupon.Info = { code: '' }
+  private couponSave: ICoupon.Save = {
+    phoneNumber: '',
+    agree: false,
+    mobileOS: MOBILE_OS.AOS
+  }
+
+  private couponInfo: ICoupon.Info = {
+    code: ''
+  }
+
   private dialogVisible: boolean = false
   private loading: boolean = false
 
@@ -164,10 +172,14 @@ export default class Index extends Vue {
     if (this.checkForm()) {
       return
     }
-    this.loading = true
-    const res: IResponse<ICoupon.Info> = await this.$axios.post('/api/coupons', this.couponSave)
-    this.couponInfo = res.data.body
-    this.loading = false
+    try {
+      this.loading = true
+      const res: IResponse<ICoupon.Info> = await this.$axios.post('/api/coupons', this.couponSave)
+      this.couponInfo = res.data.body
+      this.loading = false
+    } catch {
+      this.loading = false
+    }
   }
 
   checkForm (): boolean {

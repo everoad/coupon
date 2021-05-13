@@ -14,6 +14,7 @@
             <el-input
               v-model="search.code"
               maxlength="12"
+              placeholder="'-' 제외"
               @keydown.enter.native.prevent="onSubmit"
             />
           </el-form-item>
@@ -21,6 +22,7 @@
             <el-input
               v-model="search.phoneNumber"
               maxlength="11"
+              placeholder="'-' 제외"
               @keydown.enter.native.prevent="onSubmit"
             />
           </el-form-item>

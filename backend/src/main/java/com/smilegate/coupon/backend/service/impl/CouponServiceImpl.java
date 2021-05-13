@@ -29,19 +29,18 @@ public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository couponRepository;
     private final CouponQueryRepository couponQueryRepository;
-
+    private final SecureRandom random = new SecureRandom();
 
     @Override
     public Page<CouponListDto> findCouponList(CouponSearchDto couponSearchDto, Pageable pageable) {
         return couponQueryRepository.findAll(couponSearchDto, pageable);
     }
 
-
     @Transactional
     @Override
     public CouponInfoDto saveCoupon(CouponSaveDto couponSaveDto) {
         if (!couponSaveDto.getAgree()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "개인정보 수집 및 이용에 대한 동의를 해주세요.");
         }
         if (couponRepository.existsByPhoneNumber(couponSaveDto.getPhoneNumber())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 사전예약을 신청하셨습니다.");
@@ -52,7 +51,6 @@ public class CouponServiceImpl implements CouponService {
         return new CouponInfoDto(couponCode);
     }
 
-
     private String getCouponCode(String phoneNumber) {
         String couponCode = generateCoupon(phoneNumber);
         if (couponRepository.existsById(couponCode)) {
@@ -60,8 +58,6 @@ public class CouponServiceImpl implements CouponService {
         }
         return couponCode;
     }
-
-    SecureRandom random = new SecureRandom();
 
     private String generateCoupon(String phoneNumber) {
         byte[] randomBytes = new byte[6];
