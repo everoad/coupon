@@ -14,12 +14,14 @@
             <el-input
               v-model="search.code"
               maxlength="12"
+              @keydown.enter.native.prevent="onSubmit"
             />
           </el-form-item>
           <el-form-item label="휴대폰번호">
             <el-input
               v-model="search.phoneNumber"
               maxlength="11"
+              @keydown.enter.native.prevent="onSubmit"
             />
           </el-form-item>
           <el-form-item label="휴대폰 OS">
@@ -42,6 +44,7 @@
           <el-form-item>
             <el-button
               type="info"
+              @click.prevent="onSubmit"
             >
               검색
             </el-button>
@@ -49,19 +52,13 @@
         </el-form>
       </section>
       <section>
-        <el-table
-          border
-          empty-text="데이터가 없습니다."
+        <base-table
+          ref="tableRef"
+          :index="true"
           :default-sort="defaultSort"
-          :data="couponList"
-          @sort-change="onSortChange"
+          :get-data="getData"
+          :set-data="setData"
         >
-          <el-table-column
-            type="index"
-            align="center"
-            :index="getIndex"
-            label="No"
-          />
           <el-table-column
             v-for="column in columns"
             :key="column.prop"
@@ -71,41 +68,35 @@
             align="center"
             sortable="custom"
           />
-        </el-table>
-
-        <base-table
-          url="/api/coupon"
-        />
-        <el-pagination
-          layout="prev, pager, next"
-          :hide-on-single-page="false"
-          :page-size="size"
-          :current-page="page"
-          :total="totalCount"
-          @current-change="setPage"
-        />
+        </base-table>
       </section>
     </div>
   </main>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
+import { Vue, Component, Ref } from 'nuxt-property-decorator'
 import * as ICoupon from '~/models/ICoupon'
 import { IResponse } from '~/models/IResponse'
 import * as ITable from '~/models/ITable'
 import MOBILE_OS from '~/models/mobile_os'
-
-const defaultSort = JSON.stringify({ prop: 'createdTime', order: 'descending' })
+import { BaseTable } from '~/components/base'
 
 @Component
 export default class Coupon extends Vue {
-  private couponList: ICoupon.List[] = []
-  private totalCount: number = 0
-  private size: number = 0
-  private page: number = 0
-  private defaultSort?: ITable.Sort
-  private search: ICoupon.Search = { code: '', phoneNumber: '', mobileOS: undefined }
+  @Ref() private tableRef!: BaseTable
+
+  private search: ICoupon.Search = {
+    code: '',
+    phoneNumber: '',
+    mobileOS: undefined
+  }
+
+  private defaultSort: ITable.Sort = {
+    prop: 'createdTime',
+    order: 'descending'
+  }
+
   private columns: Array<ITable.Column> = [
     {
       prop: 'code',
@@ -131,73 +122,27 @@ export default class Coupon extends Vue {
     }
   ]
 
-  getData () {
-
-  }
-
-  async asyncData ({ $axios, query }: any) {
-    const {
-      size = 10,
-      page = 1,
-      sort = defaultSort,
-      code,
-      phoneNumber,
-      mobileOS
-    } = query
-    const params = {
-      size: Number(size),
-      page: Number(page),
-      sort,
-      code,
-      phoneNumber,
-      mobileOS
-    }
-    const res: IResponse<ITable.Res<ICoupon.List>> = await $axios.get('/api/coupons', { params })
-    const { content, totalElements } = res.data.body
-    return {
-      couponList: content,
-      totalCount: totalElements,
-      defaultSort: sort,
-      size,
-      page,
-      search: {
-        code,
-        phoneNumber,
-        mobileOS
-      }
-    }
-  }
-
-  watchQuery (newQuery: any, oldQuery: any) {
-    return newQuery.page !== oldQuery.page ||
-      newQuery.size !== oldQuery.size ||
-      newQuery.sort !== oldQuery.sort
-  }
-
   get mobileOSList (): string[] {
     return Object.keys(MOBILE_OS)
   }
 
-  setPage (page: number) {
-    const query = this.getQueryString({ ...this.$route.query, page })
-    this.$router.push(`${this.$route.path}?${query}`)
+  async getData (params: { [key: string]: any }) {
+    const res: IResponse<ITable.Res<ICoupon.List>> = await this.$axios.get('/api/coupons', { params })
+    const { content, totalElements } = res.data.body
+    return {
+      data: content,
+      total: totalElements
+    }
   }
 
-  onSortChange ({ prop, order }: any) {
-    const sort = order ? JSON.stringify({ prop, order }) : null
-    const query = this.getQueryString({ ...this.$route.query, sort })
-    this.$router.push(`${this.$route.path}?${query}`)
+  setData (search: ICoupon.Search) {
+    this.search.code = search.code
+    this.search.phoneNumber = search.phoneNumber
+    this.search.mobileOS = search.mobileOS
   }
 
-  getIndex (index: number): number {
-    return this.totalCount - this.size * (this.page - 1) - index
-  }
-
-  getQueryString (query: { [key: string]: any }): string {
-    return Object.keys(query)
-      .filter(key => query[key])
-      .map(key => `${key}=${query[key]}`)
-      .join('&')
+  onSubmit () {
+    this.tableRef.filter({ ...this.search })
   }
 }
 </script>

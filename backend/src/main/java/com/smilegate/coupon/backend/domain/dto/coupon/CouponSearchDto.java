@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 public class CouponSearchDto {
 
+    private String code;
+
     private String phoneNumber;
 
     private MobileOSType mobileOS;

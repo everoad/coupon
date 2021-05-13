@@ -12,7 +12,7 @@ footer {
   > section {
     width: 1260px;
     margin: 0 auto;
-    padding: 60px 0 60px;
+    padding: 35px 0;
     color: #fff;
     font-weight: 600;
     text-align: center;

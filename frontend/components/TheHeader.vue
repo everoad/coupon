@@ -7,7 +7,7 @@
         </router-link>
       </li>
       <li>
-        <router-link to="/test">
+        <router-link to="/coupon">
           쿠폰목록
         </router-link>
       </li>

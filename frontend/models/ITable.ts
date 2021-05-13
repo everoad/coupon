@@ -1,7 +1,7 @@
 
 export interface Sort {
   prop: string
-  order: string
+  order: string | null
 }
 
 export interface Column {

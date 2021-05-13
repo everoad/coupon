@@ -31,7 +31,8 @@ export default {
   plugins: [
     { src: '@/plugins/element-ui', ssr: true },
     '@/plugins/vue-in-viewport-directive.js',
-    '@/plugins/utils.ts'
+    '@/plugins/utils.ts',
+    '@/plugins/axios.js'
   ],
 
   components: true,

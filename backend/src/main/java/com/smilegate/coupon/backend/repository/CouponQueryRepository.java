@@ -9,11 +9,8 @@ import com.smilegate.coupon.backend.domain.entity.Coupon;
 import com.smilegate.coupon.backend.enums.MobileOSType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-
-import java.time.LocalDateTime;
 
 import static com.smilegate.coupon.backend.domain.entity.QCoupon.coupon;
 
@@ -36,27 +33,23 @@ public class CouponQueryRepository extends Querydsl4RepositorySupport {
                 )
                 .from(coupon)
                 .where(
-                        createdTimeBefore(couponSearchDto.getEndCreatedTime()),
+                        codeLike(couponSearchDto.getCode()),
                         phoneNumberEq(couponSearchDto.getPhoneNumber()),
                         mobileOSEq(couponSearchDto.getMobileOS())
                 )
         );
     }
 
-    public BooleanExpression phoneNumberEq(String phoneNumber) {
-        return StringUtils.hasText(phoneNumber) ? coupon.phoneNumber.eq(phoneNumber) : null;
+    private BooleanExpression codeLike(String code) {
+        return StringUtils.hasText(code) ? coupon.code.contains(code) : null;
     }
 
-    public BooleanExpression createdTimeBefore(LocalDateTime endTime) {
-        if (endTime == null) {
-            endTime = LocalDateTime.now();
-        }
-        return coupon.createdTime.before(endTime);
+    private BooleanExpression phoneNumberEq(String phoneNumber) {
+        return StringUtils.hasText(phoneNumber) ? coupon.phoneNumber.eq(phoneNumber) : null;
     }
 
     private BooleanExpression mobileOSEq(MobileOSType osType) {
         return osType != null ? coupon.mobileOS.eq(osType) : null;
     }
-
 
 }
