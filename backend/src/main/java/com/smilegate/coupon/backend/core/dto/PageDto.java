@@ -1,7 +1,7 @@
 package com.smilegate.coupon.backend.core.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.smilegate.coupon.backend.core.utils.MyUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
@@ -22,8 +22,8 @@ public class PageDto {
     private static final String DESC = "descending";
 
     public Pageable getPageable() {
-        if (page == null || page < 0) {
-            page = 0;
+        if (page == null || page < 1) {
+            page = 1;
         }
         if (size == null || size < 1) {
             size = 10;
@@ -38,8 +38,7 @@ public class PageDto {
     private Sort createSortObject() {
         List<Sort.Order> orderList = new ArrayList<>();
         try {
-            ObjectMapper om = new ObjectMapper();
-            SortDto sortDto = om.readValue(sort, new TypeReference<>() {});
+            SortDto sortDto = MyUtils.OBJECT_MAPPER.readValue(sort, new TypeReference<>() {});
             if (DESC.equalsIgnoreCase(sortDto.getOrder())) {
                 orderList.add(Sort.Order.desc(sortDto.getProp()));
             } else {

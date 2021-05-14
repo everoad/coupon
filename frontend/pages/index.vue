@@ -137,7 +137,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
-import { Input } from 'element-ui'
+import { Input } from 'element-ui/types'
 import * as ICoupon from '~/models/ICoupon'
 import { IResponse } from '~/models/IResponse'
 import MOBILE_OS from '~/models/mobile_os'

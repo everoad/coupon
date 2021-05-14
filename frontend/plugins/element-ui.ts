@@ -1,12 +1,17 @@
 import Vue from 'vue'
 import {
   Button, Container, Header,
-  FormItem,
-  Input, Checkbox, Select, Option, Dialog, Radio, RadioGroup,
-  Table, TableColumn,
-  Message, Pagination, Form
+  FormItem, Form,
+  Input, Checkbox, Select, Option, Radio, RadioGroup,
+  Table, TableColumn, Pagination,
+  Message, Dialog
 } from 'element-ui'
 import { ElMessageOptions } from 'element-ui/types/message'
+
+import lang from 'element-ui/lib/locale/lang/ko'
+import locale from 'element-ui/lib/locale'
+
+locale.use(lang)
 
 Vue.component(Header.name, Header)
 Vue.component(Container.name, Container)

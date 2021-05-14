@@ -8,7 +8,11 @@ public enum MobileOSType {
 
     @JsonCreator
     public static MobileOSType from(String source) {
-        return MobileOSType.valueOf(source.toUpperCase());
+        try {
+            return MobileOSType.valueOf(source.toUpperCase());
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
 }

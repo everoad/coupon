@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
-import { Table } from 'element-ui'
+import { Table } from 'element-ui/types'
 import * as ITable from '~/models/ITable'
 
 @Component({
@@ -55,9 +55,7 @@ export default class BaseTable extends Vue {
 
   private created () {
     const { page, size, sort, search } = this.getQuery()
-    this.paging.page = page
-    this.paging.size = size
-    this.paging.sort = sort
+    this.paging = { page, size, sort }
     this.search = search
     this.setData(search)
   }
@@ -69,9 +67,7 @@ export default class BaseTable extends Vue {
   @Watch('$route.query')
   private async watchQueryString (newQuery: { [key: string]: any }, oldQuery: { [key: string]: any }) {
     const { page, size, sort, search } = this.getQuery()
-    this.paging.page = page
-    this.paging.size = size
-    this.paging.sort = sort
+    this.paging = { page, size, sort }
     if (!this.$objectEquals(this.search, search)) {
       this.search = search
       this.setData(search)

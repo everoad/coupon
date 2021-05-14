@@ -29,10 +29,11 @@ export default {
     './node_modules/element-ui/packages/theme-chalk/src/table-column.scss'
   ],
   plugins: [
-    { src: '@/plugins/element-ui', ssr: true },
-    '@/plugins/vue-in-viewport-directive.js',
+    '@/plugins/element-ui',
+    '@/plugins/vue-in-viewport-directive.ts',
     '@/plugins/utils.ts',
-    '@/plugins/axios.js'
+    '@/plugins/axios.ts',
+    '@/plugins/base-element.ts'
   ],
 
   components: true,
@@ -46,7 +47,8 @@ export default {
   ],
 
   axios: {
-    proxy: true
+    proxy: process.env.NODE_ENV !== 'production',
+    baseURL: process.env.BASE_URL || 'http://localhost:3000'
   },
 
   proxy: {

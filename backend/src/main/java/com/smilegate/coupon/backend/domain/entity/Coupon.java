@@ -22,11 +22,9 @@ import javax.persistence.*;
 )
 public class Coupon extends BaseTimeEntity implements Persistable<String> {
 
-
     @Id
     @Column(name = "coupon_code", length = 12, nullable = false, updatable = false)
     private String code;
-
 
     @Column(name = "phone_number", length = 11, nullable = false, updatable = false)
     private String phoneNumber;
@@ -35,29 +33,25 @@ public class Coupon extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "mobile_os", length = 3, nullable = false)
     private MobileOSType mobileOS;
 
-
     @Builder
     public Coupon(String code, String phoneNumber, MobileOSType mobileOS) {
         Assert.hasText(code, "code is not empty.");
         Assert.state(code.length() == 12, "size of code must be 12.");
         Assert.hasText(phoneNumber, "phoneNumber is not empty.");
-        Assert.state(phoneNumber.length() == 10 || phoneNumber.length() == 11, "size of phoneNumber must be 10~11.");
+        Assert.state(10 <= phoneNumber.length() && phoneNumber.length() <= 11, "size of phoneNumber must be 10~11.");
         this.code = code;
         this.phoneNumber = phoneNumber;
         this.mobileOS = mobileOS;
     }
-
 
     @Override
     public String getId() {
         return this.code;
     }
 
-
     @Override
     public boolean isNew() {
         return getCreatedTime() == null;
     }
-
 
 }

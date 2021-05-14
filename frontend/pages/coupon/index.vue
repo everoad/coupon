@@ -138,9 +138,7 @@ export default class Coupon extends Vue {
   }
 
   setData (search: ICoupon.Search) {
-    this.search.code = search.code
-    this.search.phoneNumber = search.phoneNumber
-    this.search.mobileOS = search.mobileOS
+    this.search = { ...search }
   }
 
   onSubmit () {

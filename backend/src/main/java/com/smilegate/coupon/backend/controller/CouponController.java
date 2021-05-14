@@ -9,33 +9,28 @@ import com.smilegate.coupon.backend.domain.dto.coupon.CouponSearchDto;
 import com.smilegate.coupon.backend.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/coupons", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CouponController {
 
-
     private final CouponService couponService;
 
-
     @GetMapping
-    public ApiResponseDto<Page<CouponListDto>> findCouponList(CouponSearchDto couponSearchDto, PageDto pageDto) {
+    public ApiResponseDto<Page<CouponListDto>> findCouponList(@Valid CouponSearchDto couponSearchDto, PageDto pageDto) {
         Page<CouponListDto> couponPage = couponService.findCouponList(couponSearchDto, pageDto.getPageable());
         return new ApiResponseDto<>(couponPage);
     }
 
-
     @PostMapping
-    public ApiResponseDto<CouponInfoDto> saveCoupon(@Validated @RequestBody CouponSaveDto couponSaveDto) {
+    public ApiResponseDto<CouponInfoDto> saveCoupon(@Valid @RequestBody CouponSaveDto couponSaveDto) {
         CouponInfoDto couponInfoDto = couponService.saveCoupon(couponSaveDto);
         return new ApiResponseDto<>(couponInfoDto);
     }
-
 
 }
