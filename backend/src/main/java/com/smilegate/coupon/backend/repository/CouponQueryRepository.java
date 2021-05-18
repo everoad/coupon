@@ -34,7 +34,7 @@ public class CouponQueryRepository extends Querydsl4RepositorySupport {
                 .from(coupon)
                 .where(
                         codeLike(couponSearchDto.getCode()),
-                        phoneNumberEq(couponSearchDto.getPhoneNumber()),
+                        phoneNumberLike(couponSearchDto.getPhoneNumber()),
                         mobileOSEq(couponSearchDto.getMobileOS())
                 )
         );
@@ -44,7 +44,7 @@ public class CouponQueryRepository extends Querydsl4RepositorySupport {
         return StringUtils.hasText(code) ? coupon.code.containsIgnoreCase(code) : null;
     }
 
-    private BooleanExpression phoneNumberEq(String phoneNumber) {
+    private BooleanExpression phoneNumberLike(String phoneNumber) {
         return StringUtils.hasText(phoneNumber) ? coupon.phoneNumber.contains(phoneNumber) : null;
     }
 

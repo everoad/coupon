@@ -11,11 +11,7 @@ import java.time.LocalDateTime;
 public class CouponSearchDto {
 
     private String code;
-
     private String phoneNumber;
-
     private MobileOSType mobileOS;
-
-    private LocalDateTime endCreatedTime;
 
 }

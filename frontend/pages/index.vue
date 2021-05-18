@@ -176,8 +176,9 @@ export default class Index extends Vue {
       this.loading = true
       const res: IResponse<ICoupon.Info> = await this.$axios.post('/api/coupons', this.couponSave)
       this.couponInfo = res.data.body
-      this.loading = false
-    } catch {
+    } catch (error) {
+      this.$message(error.message)
+    } finally {
       this.loading = false
     }
   }
@@ -186,20 +187,20 @@ export default class Index extends Vue {
     const { phoneNumber, agree, mobileOS } = this.couponSave
     if (!phoneNumber) {
       (this.$refs.phoneInput as Input).focus()
-      alert('휴대폰 번호를 입력해 주세요.')
+      this.$message('휴대폰 번호를 입력해 주세요.')
       return true
     }
     if (phoneNumber.length < 10 || this.isNotInteger(phoneNumber)) {
       (this.$refs.phoneInput as Input).focus()
-      alert('휴대폰 번호를 확인해 주세요.')
+      this.$message('휴대폰 번호를 확인해 주세요.')
       return true
     }
     if (!agree) {
-      alert('개인정보 수집 및 이용 동의를 해주세요.')
+      this.$message('개인정보 수집 및 이용 동의를 해주세요.')
       return true
     }
     if (!mobileOS) {
-      alert('사용하시는 핸드폰 OS를 선택해 주세요.')
+      this.$message('사용하시는 핸드폰 OS를 선택해 주세요.')
       return true
     }
     return false
