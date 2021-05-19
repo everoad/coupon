@@ -22,7 +22,7 @@ public class CouponController {
     private final CouponService couponService;
 
     @GetMapping
-    public ApiResponseDto<Page<CouponListDto>> findCouponList(@Valid CouponSearchDto couponSearchDto, PageDto pageDto) {
+    public ApiResponseDto<Page<CouponListDto>> findCouponList(CouponSearchDto couponSearchDto, PageDto pageDto) {
         Page<CouponListDto> couponPage = couponService.findCouponList(couponSearchDto, pageDto.getPageable());
         return new ApiResponseDto<>(couponPage);
     }
