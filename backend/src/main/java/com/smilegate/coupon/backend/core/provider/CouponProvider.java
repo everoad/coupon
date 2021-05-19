@@ -28,7 +28,15 @@ public class CouponProvider {
         String seed = System.currentTimeMillis() + phoneNumber;
         random.setSeed(seed.getBytes(StandardCharsets.UTF_8));
         random.nextBytes(randomBytes);
-        return new BigInteger(1, randomBytes).toString(16).toUpperCase();
+        return convertByteArrayToHex(randomBytes);
+    }
+
+    private String convertByteArrayToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (final byte b : bytes) {
+            builder.append(String.format("%02x", b & 0xff).toUpperCase());
+        }
+        return builder.toString().toUpperCase();
     }
 
 }
