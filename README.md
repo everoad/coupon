@@ -2,19 +2,21 @@
 
 ### BACKEND
 
-1. File > Product structure > Project > SDK 선택 (11 이상)<br>
+1. Import gradle dependencies
+
+
+2. File > Product structure > Project > SDK 선택 (11 이상)<br>
    ![image](https://user-images.githubusercontent.com/23130815/118748919-85d78a80-b897-11eb-817c-3a9041a48e2a.png)
    
    
-2. Run > Edit Configurations > Spring boot Configuration 추가 한 뒤 <br>
+3. Run > Edit Configurations > Spring boot Configuration 추가 한 뒤 <br>
    `main class`, `Active profiles`를 아래와 같이 입력<br>
    ![image](https://user-images.githubusercontent.com/23130815/118749034-b3243880-b897-11eb-9466-58d7ad756855.png)
    
 
-3. Import gradle dependencies
-
-
 4. 서버 시작
+
+
 
 <br>
 
