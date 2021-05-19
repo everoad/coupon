@@ -4,7 +4,6 @@ import com.smilegate.coupon.backend.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 
@@ -28,15 +27,21 @@ public class CouponProvider {
         String seed = System.currentTimeMillis() + phoneNumber;
         random.setSeed(seed.getBytes(StandardCharsets.UTF_8));
         random.nextBytes(randomBytes);
-        return convertByteArrayToHex(randomBytes);
+        return convertByteArrayToBase32(randomBytes);
     }
 
-    private String convertByteArrayToHex(byte[] bytes) {
+    private String convertByteArrayToBase32(byte[] bytes) {
         StringBuilder builder = new StringBuilder();
         for (final byte b : bytes) {
-            builder.append(String.format("%02x", b & 0xff));
+            String str = Integer.toString(b & 0xff, 32);
+            str = Math.round(Math.random()) > 0 ? str.toUpperCase() : str.toLowerCase();
+            if (str.length() < 2) {
+                builder.append("0").append(str);
+            } else {
+                builder.append(str);
+            }
         }
-        return builder.toString().toUpperCase();
+        return builder.toString();
     }
 
 }
