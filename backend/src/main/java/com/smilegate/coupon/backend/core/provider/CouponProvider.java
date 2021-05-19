@@ -17,7 +17,7 @@ public class CouponProvider {
     public String createNCheckCode(String phoneNumber) {
         String couponCode = createCode(phoneNumber);
         if (couponRepository.existsById(couponCode)) {
-            return createCode(phoneNumber);
+            return createNCheckCode(phoneNumber);
         }
         return couponCode;
     }
