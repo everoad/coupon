@@ -34,7 +34,7 @@ public class CouponProvider {
     private String convertByteArrayToHex(byte[] bytes) {
         StringBuilder builder = new StringBuilder();
         for (final byte b : bytes) {
-            builder.append(String.format("%02x", b & 0xff).toUpperCase());
+            builder.append(String.format("%02x", b & 0xff));
         }
         return builder.toString().toUpperCase();
     }
