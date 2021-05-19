@@ -2,7 +2,7 @@
 
 ### BACKEND
 
-1. Import gradle dependencies
+1. Import Gradle Project
 
 
 2. File > Product structure > Project > SDK 선택 (11 이상)<br>
